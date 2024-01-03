@@ -1,5 +1,7 @@
+import 'package:advartage_test_task/feature/contact/bloc/contact_bloc.dart';
 import 'package:advartage_test_task/feature/contact/ui/contact_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactScreen extends StatelessWidget {
   const ContactScreen({super.key});
@@ -16,38 +18,53 @@ class ContactScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            const ContactFormField(
-              hintText: 'Name',
-            ),
-            const SizedBox(height: 24),
-            const ContactFormField(
-              hintText: 'Email',
-            ),
-            const SizedBox(height: 24),
-            const ContactFormField(
-              hintText: 'Message',
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF916f8c)),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  textStyle: MaterialStateProperty.all<TextStyle>(
-                    const TextStyle(
-                      fontWeight: FontWeight.bold,
+        child: BlocBuilder<ContactBloc, ContactState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                ContactFormField(
+                  hintText: 'Name',
+                  errorText: state.nameError,
+                  onChanged: (value) => context.read<ContactBloc>().add(ContactEventNameChanged(value)),
+                ),
+                const SizedBox(height: 24),
+                ContactFormField(
+                  hintText: 'Email',
+                  errorText: state.emailError,
+                  onChanged: (value) => context.read<ContactBloc>().add(ContactEventEmailChanged(value)),
+                ),
+                const SizedBox(height: 24),
+                ContactFormField(
+                  hintText: 'Message',
+                  errorText: state.messageError,
+                  lines: 2,
+                  onChanged: (value) => context.read<ContactBloc>().add(ContactEventMessageChanged(value)),
+                ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: state.processing || state.buttonDisabled ? null : () {},
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => states.contains(MaterialState.disabled) ? Colors.grey : const Color(0xFF916f8c),
+                      ),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      textStyle: MaterialStateProperty.all<TextStyle>(
+                        const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      state.processing ? 'please wait' : 'Send',
                     ),
                   ),
                 ),
-                child: const Text('Send'),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

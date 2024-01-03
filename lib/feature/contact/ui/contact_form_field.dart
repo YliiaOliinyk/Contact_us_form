@@ -4,8 +4,15 @@ class ContactFormField extends StatelessWidget {
   const ContactFormField({
     super.key,
     required this.hintText,
+    this.onChanged,
+    this.errorText,
+    this.lines = 1,
   });
+
+  final int lines;
   final String hintText;
+  final ValueChanged<String>? onChanged;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +29,13 @@ class ContactFormField extends StatelessWidget {
         const SizedBox(width: 24),
         Expanded(
           child: TextField(
+            minLines: lines,
+            maxLines: lines,
+            onChanged: onChanged,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
               hintText: hintText,
+              errorText: errorText,
             ),
           ),
         ),

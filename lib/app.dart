@@ -1,4 +1,4 @@
-import 'package:advartage_test_task/feature/contact/ui/contact_screen.dart';
+import 'package:advartage_test_task/feature/contact/ui/contact_scope.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -6,8 +6,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ContactScreen(),
+    return const MaterialApp(
+      home: ContactScope(),
       debugShowCheckedModeBanner: false,
     );
   }
