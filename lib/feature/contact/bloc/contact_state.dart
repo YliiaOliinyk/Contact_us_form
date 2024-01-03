@@ -11,6 +11,8 @@ class ContactState {
 
   final bool processing;
   final bool buttonDisabled;
+
+  final String? notification;
   
 
   bool get isValid => nameError == null && emailError == null && messageError == null;
@@ -24,6 +26,7 @@ class ContactState {
     this.nameError,
     this.emailError,
     this.messageError,
+    this.notification,
     this.processing = false,
     this.buttonDisabled = true,
   });
@@ -35,6 +38,7 @@ class ContactState {
     String? nameError,
     String? emailError,
     String? messageError,
+    String? notification,
     bool? processing,
     bool? buttonDisabled,
   }) {
@@ -45,6 +49,7 @@ class ContactState {
       nameError: nameError,
       emailError: emailError,
       messageError: messageError,
+      notification: notification,
       processing: processing ?? this.processing,
       buttonDisabled: buttonDisabled ?? this.buttonDisabled,
     );

@@ -1,4 +1,5 @@
-
+import 'package:advartage_test_task/feature/contact/data/model/contact_request_body.dart';
+import 'package:advartage_test_task/feature/contact/data/service/contact_service.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,7 +7,8 @@ part 'contact_event.dart';
 part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
-  ContactBloc() : super(ContactState(name: '', email: '', message: '')) {
+  final ContactService _contactService;
+  ContactBloc(this._contactService) : super(ContactState(name: '', email: '', message: '')) {
     on<ContactEventNameChanged>((event, emit) {
       if (event.name.isEmpty) {
         emit(
@@ -25,6 +27,10 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             nameError: null,
             emailError: state.emailError,
             messageError: state.messageError,
+          ),
+        );
+        emit(
+          state.copyWith(
             buttonDisabled: !(state.isValid && state.allFieldEntered),
           ),
         );
@@ -52,7 +58,11 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             nameError: state.nameError,
             emailError: state.emailError,
             messageError: null,
-            buttonDisabled:  !(state.isValid && state.allFieldEntered),
+          ),
+        );
+        emit(
+          state.copyWith(
+            buttonDisabled: !(state.isValid && state.allFieldEntered),
           ),
         );
       }
@@ -71,7 +81,11 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             nameError: state.nameError,
             emailError: null,
             messageError: state.messageError,
-            buttonDisabled:  !(state.isValid && state.allFieldEntered),
+          ),
+        );
+        emit(
+          state.copyWith(
+            buttonDisabled: !(state.isValid && state.allFieldEntered),
           ),
         );
       } else {
@@ -88,5 +102,22 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         );
       }
     });
+
+    on<ContactEventSubmitted>((event, emit) async {
+      emit(state.copyWith(processing: true));
+      final responce = await _contactService.sendContactForm(
+        ContactRequestBody(
+          name: state.name,
+          email: state.email,
+          message: state.message,
+        ),
+      );
+      emit(state.copyWith(processing: false)); 
+      if(responce.statusCode == 201) {
+        emit(state.copyWith(notification: 'The message was sent successfully'));
+      } else {
+        emit(state.copyWith(notification: 'The message was not sent successfully'));
+      }
+    }); 
   }
 }
