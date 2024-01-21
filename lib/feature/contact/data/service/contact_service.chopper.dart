@@ -18,8 +18,8 @@ final class _$ContactService extends ContactService {
   final Type definitionType = ContactService;
 
   @override
-  Future<Response<dynamic>> sendContactForm(ContactRequestBody body) {
-    final Uri $url = Uri.parse('/test/contact');
+  Future<Response<dynamic>> sendContactForm(Map<String, dynamic> body) {
+    final Uri $url = Uri.parse('https://api.byteplex.info/api/test/contact/');
     final $body = body;
     final Request $request = Request(
       'POST',

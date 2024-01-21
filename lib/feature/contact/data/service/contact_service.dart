@@ -1,14 +1,13 @@
 import "dart:async";
-import 'package:advartage_test_task/feature/contact/data/model/contact_request_body.dart';
 import 'package:chopper/chopper.dart';
 
 part "contact_service.chopper.dart";
 
-@ChopperApi(baseUrl: "/test")
+@ChopperApi(baseUrl: "https://api.byteplex.info/api/test")
 abstract class ContactService extends ChopperService {
-  @Post(path: '/contact')
+  @Post(path: '/contact/')
   Future<Response> sendContactForm(
-    @Body() ContactRequestBody body,
+    @Body() Map<String, dynamic> body,
   );
 
   static ContactService create([ChopperClient? client]) => _$ContactService(client);

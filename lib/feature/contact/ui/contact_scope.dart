@@ -11,10 +11,11 @@ class ContactScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ContactBloc(ContactService.create(ChopperClient(
-        baseUrl: Uri.tryParse("https://api.byteplex.info/api/"),
-        converter: const JsonConverter(),
-      ))),
+      create: (context) => ContactBloc(
+        ContactService.create(
+          ChopperClient(converter: const JsonConverter()),
+        ),
+      ),
       child: const ContactScreen(),
     );
   }

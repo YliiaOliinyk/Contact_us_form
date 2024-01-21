@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:advartage_test_task/feature/contact/data/model/contact_request_body.dart';
 import 'package:advartage_test_task/feature/contact/data/service/contact_service.dart';
 
@@ -8,7 +10,8 @@ part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactService _contactService;
-  ContactBloc(this._contactService) : super(ContactState(name: '', email: '', message: '')) {
+
+  ContactBloc(this._contactService) : super(ContactState(email: '', message: '', name: '')) {
     on<ContactEventNameChanged>((event, emit) {
       if (event.name.isEmpty) {
         emit(
@@ -110,14 +113,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
           name: state.name,
           email: state.email,
           message: state.message,
-        ),
+        ).toJson(),
       );
-      emit(state.copyWith(processing: false)); 
-      if(responce.statusCode == 201) {
+      emit(state.copyWith(processing: false));
+      if (responce.statusCode == 201) {
         emit(state.copyWith(notification: 'The message was sent successfully'));
+      } else if (responce.statusCode == 400) {
+        final errorBody = jsonDecode(responce.bodyString);
+        final errorMessage = errorBody['email'] as String?;
+
+        if (errorMessage != null) {
+          emit(state.copyWith(notification: errorMessage));
+        }
       } else {
         emit(state.copyWith(notification: 'The message was not sent successfully'));
       }
-    }); 
+    });
   }
 }

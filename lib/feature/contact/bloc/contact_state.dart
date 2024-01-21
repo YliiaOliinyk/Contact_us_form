@@ -9,15 +9,14 @@ class ContactState {
   final String? emailError;
   final String? messageError;
 
+
   final bool processing;
   final bool buttonDisabled;
 
   final String? notification;
-  
 
   bool get isValid => nameError == null && emailError == null && messageError == null;
   bool get allFieldEntered => name.isNotEmpty && email.isNotEmpty && message.isNotEmpty;
-
 
   ContactState({
     required this.name,
@@ -55,3 +54,4 @@ class ContactState {
     );
   }
 }
+
